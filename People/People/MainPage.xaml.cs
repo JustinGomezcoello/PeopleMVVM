@@ -6,10 +6,10 @@ namespace People;
 public partial class MainPage : ContentPage
 {
 
-	public MainPage()
-	{
-		InitializeComponent();
-	}
+    public MainPage()
+    {
+        InitializeComponent();
+    }
 
     public void OnNewButtonClicked(object sender, EventArgs args)
     {
