@@ -4,12 +4,17 @@ public partial class App : Application
 {
     public static PersonRepository PersonRepo { get; private set; }
 
-    public App(PersonRepository repo)
+    public App()
     {
         InitializeComponent();
 
-        MainPage = new AppShell();
+        // Ruta de la base de datos
+        string dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "people.db3");
 
-        PersonRepo = repo;
+        // Inicializar el repositorio
+        PersonRepo = new PersonRepository(dbPath);
+
+        MainPage = new MainPage();
     }
 }
+

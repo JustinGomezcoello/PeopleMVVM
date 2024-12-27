@@ -1,38 +1,45 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="People.MainPage" 
-             BackgroundColor="{DynamicResource Light}">
+             xmlns:vm="clr-namespace:People.ViewModels"
+             x:Class="People.MainPage"
+             Title="Justin Gomezcoello">
 
-    <Grid Padding="5" RowSpacing="5" ColumnSpacing="5"
-          RowDefinitions="Auto,Auto,Auto,Auto,*">
+    <ContentPage.BindingContext>
+        <vm:MainPageViewModel />
+    </ContentPage.BindingContext>
 
-        <Entry x:Name="newPerson"
-           Placeholder="Enter name" />
+    <VerticalStackLayout>
+        <!-- Header -->
+        <Label Text="Justin Gomezcoello" FontSize="24" HorizontalOptions="Center" x:Name="jgomezcoello_title" />
+        
+        <!-- Card -->
+        <Frame Padding="10" Margin="10" CornerRadius="15" BackgroundColor="LightGray">
+            <StackLayout>
+                <Label Text="Cristian Justin Gomezcoello Londono" FontSize="20" FontAttributes="Bold" x:Name="jgomezcoello_card_name" />
+                <Label Text="Edad: 20" FontSize="16" x:Name="jgomezcoello_card_age" />
+                <Image Source="profile_photo.jpg" HeightRequest="300" WidthRequest="300" HorizontalOptions="Center" />
+            </StackLayout>
+        </Frame>
 
-        <Button Text="Add Person"
-            Grid.Row="1"
-            Clicked="OnNewButtonClicked" />
+        <!-- Add Person -->
+        <Entry Placeholder="Ingresa el nombre" Text="{Binding NewPersonName}" x:Name="jgomezcoello_entry" />
+        <Button Text="Agregar Persona" Command="{Binding AddPersonCommand}" />
 
-        <Label x:Name="statusMessage"
-           TextColor="{StaticResource Primary}"
-           Grid.Row="2" />
-
-        <Button Text="Get All People"
-            Grid.Row="3"
-            Clicked="OnGetButtonClicked" />
-
-        <CollectionView x:Name="peopleList" Grid.Row="4">
-            <CollectionView.ItemTemplate>
+        <!-- ListView -->
+        <ListView ItemsSource="{Binding People}" x:Name="jgomezcoello_listView">
+            <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Grid ColumnDefinitions="*,2*">
-                        <Label Text="{Binding Id}" TextColor="{StaticResource Primary}"/>
-                        <Label Grid.Column="1" Text="{Binding Name}" TextColor="{StaticResource Primary}"/>
-                    </Grid>
+                    <ViewCell>
+                        <StackLayout Orientation="Horizontal">
+                            <Label Text="{Binding Name}" VerticalOptions="Center" />
+                            <Button Text="Eliminar"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainPageViewModel}}, Path=DeletePersonCommand}"
+                                    CommandParameter="{Binding .}" />
+                        </StackLayout>
+                    </ViewCell>
                 </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-
-    </Grid>
-
+            </ListView.ItemTemplate>
+        </ListView>
+    </VerticalStackLayout>
 </ContentPage>

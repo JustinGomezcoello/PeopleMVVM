@@ -27,6 +27,10 @@ public class PersonRepository
         _dbPath = dbPath;
     }
 
+    public PersonRepository()
+    {
+    }
+
     public async Task AddNewPerson(string name)
     {
         int result = 0;
@@ -63,4 +67,36 @@ public class PersonRepository
 
         return new List<Person>();
     }
+    public async Task<Person> GetPersonById(int id)
+    {
+        try
+        {
+            await Init();
+            return await conn.FindAsync<Person>(id);
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = string.Format("Failed to retrieve person. Error: {0}", ex.Message);
+            return null;
+        }
+    }
+
+    public async Task DeletePerson(int id)
+    {
+        try
+        {
+            await Init();
+            var person = await conn.FindAsync<Person>(id);
+            if (person != null)
+            {
+                await conn.DeleteAsync(person);
+                StatusMessage = $"Person with ID {id} deleted successfully.";
+            }
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = string.Format("Failed to delete person. Error: {0}", ex.Message);
+        }
+    }
+
 }
